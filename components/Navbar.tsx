@@ -20,21 +20,21 @@ export default function Navbar({ user }: Props) {
   }
 
   return (
-    <nav className="w-full border-b bg-white dark:bg-black">
+    <nav className="w-full border-b bg-white dark:bg-background-dark">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/">
-            <a className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <Image src="/logo.svg" alt="Chatlio" width={36} height={36} />
-              <span className="font-bold text-lg text-darkText">Chatlio</span>
-            </a>
+              <span className="font-bold text-lg text-foreground">Chatlio</span>
+            </div>
           </Link>
-          <div className="hidden md:flex gap-3 ml-6">
-            <Link href="/dashboard"><a className="text-sm">Dashboard</a></Link>
-            <Link href="/contacts"><a className="text-sm">Contacts</a></Link>
-            <Link href="/pipeline"><a className="text-sm">Deals</a></Link>
-            <Link href="/reminders"><a className="text-sm">Reminders</a></Link>
-            <Link href="/settings"><a className="text-sm">Settings</a></Link>
+          <div className="hidden md:flex gap-6 ml-6 items-center">
+            <Link href="/dashboard"><span className="text-sm hover:text-primary">Dashboard</span></Link>
+            <Link href="/contacts"><span className="text-sm hover:text-primary">Contacts</span></Link>
+            <Link href="/pipeline"><span className="text-sm hover:text-primary">Deals</span></Link>
+            <Link href="/reminders"><span className="text-sm hover:text-primary">Reminders</span></Link>
+            <Link href="/settings"><span className="text-sm hover:text-primary">Settings</span></Link>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -42,18 +42,18 @@ export default function Navbar({ user }: Props) {
           <div className="relative">
             {user ? (
               <div className="flex items-center gap-2">
-                <button className="w-9 h-9 rounded-full bg-gray-200" aria-label="User menu" onClick={() => setOpen(!open)} />
+                <button className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700" aria-label="User menu" onClick={() => setOpen(!open)} />
                 {open && (
-                  <div className="absolute right-0 mt-2 bg-white border rounded shadow p-2">
-                    <button className="block w-full text-left px-2 py-1" onClick={() => router.push('/settings')}>Settings</button>
-                    <button className="block w-full text-left px-2 py-1" onClick={handleLogout}>Logout</button>
+                  <div className="absolute right-0 mt-2 bg-white dark:bg-gray-800 border rounded shadow p-2">
+                    <button className="block w-full text-left px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700" onClick={() => router.push('/settings')}>Settings</button>
+                    <button className="block w-full text-left px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700" onClick={handleLogout}>Logout</button>
                   </div>
                 )}
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link href="/login"><a className="text-sm">Login</a></Link>
-                <Link href="/register"><a className="text-sm">Register</a></Link>
+                <Link href="/login"><span className="text-sm px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Login</span></Link>
+                <Link href="/register"><span className="text-sm px-3 py-1 rounded bg-primary text-white hover:opacity-90">Register</span></Link>
               </div>
             )}
           </div>

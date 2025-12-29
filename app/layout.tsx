@@ -18,7 +18,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen bg-background text-foreground antialiased">
         {/* Providers is a client component that provides toast/confirm hooks */}
         <Providers>
           <Navbar user={user ?? null} />
