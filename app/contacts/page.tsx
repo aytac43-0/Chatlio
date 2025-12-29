@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import ContactList from '../../components/ContactList';
-import ContactForm from '../../components/ContactForm';
+import ContactsShell from '../../components/ContactsShell.client';
 
 type Contact = {
   id: string;
@@ -30,20 +29,8 @@ export default async function ContactsPage() {
     created_at: c.created_at ? new Date(c.created_at).toISOString() : null
   }));
 
-  const [showForm, setShowForm] = useState(false as boolean);
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Contacts</h1>
-        <button
-          className="px-3 py-2 bg-primary text-white rounded"
-          onClick={() => setShowForm((s) => !s)}
-        >
-          Add Contact
-        </button>
-      </div>
-
       {error && (
         <div className="p-4 bg-red-50 text-red-700 rounded">Failed to load contacts. Please refresh.</div>
       )}
@@ -52,12 +39,12 @@ export default async function ContactsPage() {
         <div className="p-6 bg-white dark:bg-gray-900 rounded shadow">
           <p className="text-lg">You don’t have any contacts yet.</p>
           <div className="mt-4">
-            <ContactForm onClose={() => { /* nothing - client will refresh */ }} />
+            <ContactsShell contacts={contacts} />
           </div>
         </div>
       ) : (
         <div>
-          <ContactList contacts={contacts} />
+          <ContactsShell contacts={contacts} />
         </div>
       )}
     </div>

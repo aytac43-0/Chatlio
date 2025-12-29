@@ -4,7 +4,7 @@ import AnimatedAuthCard from '../../../components/AnimatedAuthCard';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import { isEmail, passwordStrength } from '../../../lib/validators';
-import { signUpWithProfile } from '../../../lib/auth';
+import { signUpWithProfile } from '../../../lib/auth.client';
 import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
