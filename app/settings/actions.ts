@@ -10,7 +10,24 @@ export async function updateProfile(formData: FormData) {
 
   if (!username.trim()) throw new Error('Username is required');
 
-  const supabase = createServerClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          try { cookieStore.set({ name, value, ...options }); } catch (e) {}
+        },
+        remove(name: string, options: any) {
+          try { cookieStore.set({ name, value: '', ...options }); } catch (e) {}
+        }
+      }
+    }
+  );
   const {
     data: { session }
   } = await supabase.auth.getSession();
@@ -36,13 +53,30 @@ export async function changePassword(formData: FormData) {
   const next = (formData.get('next') as string | null) ?? '';
   if (!next) throw new Error('New password required');
   // Note: Supabase does not provide a direct changePassword via anon client; use update user with password
-  const supabase = createServerClient({ cookies });
+  const cookieStore2 = cookies();
+  const supabase2 = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore2.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          try { cookieStore2.set({ name, value, ...options }); } catch (e) {}
+        },
+        remove(name: string, options: any) {
+          try { cookieStore2.set({ name, value: '', ...options }); } catch (e) {}
+        }
+      }
+    }
+  );
   const {
-    data: { session }
-  } = await supabase.auth.getSession();
-  if (!session?.user) throw new Error('Not authenticated');
+    data: { session: session2 }
+  } = await supabase2.auth.getSession();
+  if (!session2?.user) throw new Error('Not authenticated');
 
-  const { error } = await supabase.auth.updateUser({ password: next });
+  const { error } = await supabase2.auth.updateUser({ password: next });
   if (error) {
     console.error('changePassword error', error);
     throw new Error('Failed to change password');
@@ -53,21 +87,38 @@ export async function changePassword(formData: FormData) {
 
 export async function deleteAccount(formData: FormData) {
   // Best-effort delete: remove profile and related rows; cannot delete auth user without service role.
-  const supabase = createServerClient({ cookies });
+  const cookieStore3 = cookies();
+  const supabase3 = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore3.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          try { cookieStore3.set({ name, value, ...options }); } catch (e) {}
+        },
+        remove(name: string, options: any) {
+          try { cookieStore3.set({ name, value: '', ...options }); } catch (e) {}
+        }
+      }
+    }
+  );
   const {
-    data: { session }
-  } = await supabase.auth.getSession();
-  if (!session?.user) throw new Error('Not authenticated');
+    data: { session: session3 }
+  } = await supabase3.auth.getSession();
+  if (!session3?.user) throw new Error('Not authenticated');
 
-  const uid = session.user.id;
+  const uid = session3.user.id;
   // Delete profile (cascade will remove customers -> pipeline, reminders if FK cascade set)
-  const { error } = await supabase.from('profiles').delete().eq('id', uid);
+  const { error } = await supabase3.from('profiles').delete().eq('id', uid);
   if (error) {
     console.error('deleteAccount error', error);
     throw new Error('Failed to delete account data');
   }
 
   // Sign out client
-  await supabase.auth.signOut();
+  await supabase3.auth.signOut();
   revalidatePath('/');
 }

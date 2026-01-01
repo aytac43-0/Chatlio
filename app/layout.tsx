@@ -11,7 +11,24 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   // Create Supabase server client to optionally read session in server-rendered layout
-  const serverSupabase = createServerClient({ cookies });
+  const cookieStore = cookies();
+  const serverSupabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          try { cookieStore.set({ name, value, ...options }); } catch (e) {}
+        },
+        remove(name: string, options: any) {
+          try { cookieStore.set({ name, value: '', ...options }); } catch (e) {}
+        }
+      }
+    }
+  );
   try {
     await serverSupabase.auth.getSession();
   } catch (e) {

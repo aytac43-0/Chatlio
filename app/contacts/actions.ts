@@ -24,7 +24,32 @@ export async function createContact(formData: FormData) {
     throw new Error('Invalid email address');
   }
 
-  const supabase = createServerClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          try {
+            cookieStore.set({ name, value, ...options });
+          } catch (e) {
+            // ignore
+          }
+        },
+        remove(name: string, options: any) {
+          try {
+            cookieStore.set({ name, value: '', ...options });
+          } catch (e) {
+            // ignore
+          }
+        }
+      }
+    }
+  );
 
   // Ensure we have an authenticated user
   const {
@@ -59,7 +84,24 @@ export async function deleteContact(formData: FormData) {
   const id = (formData.get('id') as string | null) ?? '';
   if (!id) throw new Error('Missing contact id');
 
-  const supabase = createServerActionClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          try { cookieStore.set({ name, value, ...options }); } catch (e) {}
+        },
+        remove(name: string, options: any) {
+          try { cookieStore.set({ name, value: '', ...options }); } catch (e) {}
+        }
+      }
+    }
+  );
 
   const { error } = await supabase.from('customers').delete().eq('id', id);
   if (error) {
