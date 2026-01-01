@@ -4,12 +4,15 @@ import AnimatedAuthCard from '../../../components/AnimatedAuthCard';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import { supabase } from '../../../lib/supabaseClient';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const search = useSearchParams();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -18,7 +21,10 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) setError(error.message);
-    else window.location.href = '/dashboard';
+    else {
+      const from = search?.get('from') || '/dashboard';
+      router.push(from);
+    }
   }
 
   return (

@@ -55,23 +55,10 @@ export async function signUpWithProfile(params: SignUpParams) {
       throw new Error(msg);
     }
 
+    // Supabase auth user created. Profile creation is handled server-side by a DB trigger
+    // to ensure transactional creation and avoid client-side races or RLS issues.
     const user = data?.user;
     if (!user || !user.id) throw new Error('Account created but no user id returned.');
-
-    const profileRow = {
-      id: user.id,
-      email,
-      full_name: fullName,
-      username,
-      role: 'user'
-    };
-
-    const { error: insertError } = await supabase.from('profiles').insert(profileRow);
-    if (insertError) {
-      console.error('profiles.insert error:', insertError);
-      throw new Error('Account created but failed to create profile. If this persists, contact support.');
-    }
-
     return user;
   } catch (err: any) {
     if (err instanceof Error) throw err;

@@ -5,7 +5,7 @@ create extension if not exists "pgcrypto";
 
 -- profiles table
 create table if not exists profiles (
-  id uuid primary key default gen_random_uuid(),
+  id uuid primary key,
   email text not null,
   full_name text,
   username text not null,
@@ -62,10 +62,29 @@ create table if not exists reminders (
 -- Row-level security: enable and policies
 
 alter table profiles enable row level security;
-create policy select_own_profiles on profiles for select using (true);
-create policy insert_profiles on profiles for insert using (true) with check (true);
+create policy select_own_profiles on profiles for select using (auth.uid() = id);
+create policy insert_profiles on profiles for insert using (auth.role() = 'authenticated') with check (auth.uid() = id);
 create policy update_own_profiles on profiles for update using (auth.uid() = id) with check (auth.uid() = id);
 create policy delete_own_profiles on profiles for delete using (auth.uid() = id);
+
+-- Trigger: create a profiles row when a new auth user is created
+create function if not exists public.handle_auth_user_created() returns trigger language plpgsql as $$
+begin
+  -- Insert profile row matching auth.users id; do nothing if exists
+  if not exists (select 1 from public.profiles where id = new.id) then
+    insert into public.profiles(id, email, full_name, username, role, created_at)
+    values (new.id, new.email, new.raw_user_meta->>'full_name', new.raw_user_meta->>'username', 'user', now());
+  end if;
+  return new;
+end;
+$$;
+
+-- Attach trigger to auth.users (Supabase auth schema)
+drop trigger if exists auth_users_insert on auth.users;
+create trigger auth_users_insert
+after insert on auth.users
+for each row
+execute function public.handle_auth_user_created();
 
 alter table customers enable row level security;
 create policy customers_owner_select on customers for select using (owner_id = auth.uid());
