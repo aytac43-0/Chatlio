@@ -1,5 +1,5 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { createServerSupabase } from '../../lib/supabaseServer';
 import ProfileForm from '../../components/ProfileForm';
 import SecurityForm from '../../components/SecurityForm';
 import PreferencesForm from '../../components/PreferencesForm';
@@ -7,7 +7,7 @@ import DangerZone from '../../components/DangerZone';
 import React from 'react';
 
 export default async function SettingsPage() {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerSupabase(cookies());
   const { data } = await supabase.from('profiles').select('id, email, full_name, username').limit(1).single();
 
   const profile = data ?? null;

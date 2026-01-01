@@ -1,5 +1,5 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { createServerSupabase } from '../../lib/supabaseServer';
 import PipelineBoard from '../../components/PipelineBoard';
 import DealForm from '../../components/DealForm';
 import React from 'react';
@@ -14,7 +14,7 @@ type Deal = {
 };
 
 export default async function PipelinePage() {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerSupabase(cookies());
 
   // Fetch deals and customers in parallel
   const dealsQ = supabase

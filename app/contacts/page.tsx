@@ -1,6 +1,6 @@
 import React from 'react';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { createServerSupabase } from '../../lib/supabaseServer';
 import ContactsShell from '../../components/ContactsShell.client';
 
 type Contact = {
@@ -13,7 +13,7 @@ type Contact = {
 };
 
 export default async function ContactsPage() {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerSupabase(cookies());
 
   const { data, error } = await supabase
     .from('customers')

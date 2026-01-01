@@ -1,11 +1,11 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { createServerSupabase } from '../../lib/supabaseServer';
 import RemindersList from '../../components/RemindersList';
 import ReminderForm from '../../components/ReminderForm';
 import React from 'react';
 
 export default async function RemindersPage() {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerSupabase(cookies());
 
   const remindersQ = supabase
     .from('reminders')

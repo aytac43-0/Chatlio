@@ -117,11 +117,9 @@ export default {
  */
 export async function getCurrentSession() {
   try {
-    const serverSupabase = createServerComponentClient({ cookies });
-    const {
-      data: { session }
-    } = await serverSupabase.auth.getSession();
-    return session ?? null;
+    const serverSupabase = createServerSupabase(cookies());
+    const { data } = await serverSupabase.auth.getSession();
+    return data.session ?? null;
   } catch (err) {
     console.error('getCurrentSession error', err);
     return null;

@@ -4,7 +4,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
 import { useRouter } from 'next/navigation';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSession } from '../lib/session';
+import { supabase } from '../lib/supabaseClient';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);

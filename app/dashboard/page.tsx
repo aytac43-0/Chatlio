@@ -1,5 +1,5 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { createServerSupabase } from '../../lib/supabaseServer';
 import StatCard from '../../components/StatCard';
 
 /**
@@ -9,7 +9,7 @@ import StatCard from '../../components/StatCard';
  * - Uses Promise.all for parallel queries and gracefully handles errors.
  */
 export default async function Dashboard() {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerSupabase(cookies());
 
   // Prepare time boundary for pending reminders (due_at >= now)
   const nowIso = new Date().toISOString();
