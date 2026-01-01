@@ -2,50 +2,42 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
-// Paths
-const PUBLIC_PATHS = ['/', '/privacy-policy', '/terms-of-service', '/cookie-policy'];
-const AUTH_PATHS = ['/login', '/register', '/reset-password'];
-const PROTECTED_PATHS = ['/dashboard', '/contacts', '/pipeline', '/reminders', '/settings'];
+// Public and protected routes
+const PUBLIC_PATHS = ['/', '/login', '/register'];
+const PROTECTED_PATHS = ['/dashboard', '/clients', '/pipelines'];
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
+  // Skip next internals and API
+  const { pathname } = req.nextUrl;
+  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.includes('.')) {
+    return NextResponse.next();
+  }
 
-  // Create Supabase client tied to this request/response
+  const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
   const { data } = await supabase.auth.getSession();
   const session = data.session;
 
-  const { pathname } = req.nextUrl;
-
-  // Allow public paths always
-  if (PUBLIC_PATHS.includes(pathname)) return res;
-
-  // If user is authenticated and trying to access auth routes, redirect to /dashboard
-  if (session && AUTH_PATHS.includes(pathname)) {
-    const redirectUrl = new URL('/dashboard', req.url);
-    return NextResponse.redirect(redirectUrl);
+  // If user is authenticated and is on auth pages, send to dashboard
+  if (session && PUBLIC_PATHS.includes(pathname) && (pathname === '/login' || pathname === '/register')) {
+    const url = new URL('/dashboard', req.url);
+    return NextResponse.redirect(url);
   }
 
-  // If user not authenticated and trying to access protected routes, redirect to /login
+  // If not authenticated and trying to access protected routes, redirect to login with from
   const isProtected = PROTECTED_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
   if (!session && isProtected) {
-    const loginUrl = new URL('/login', req.url);
-    loginUrl.searchParams.set('from', pathname);
-    return NextResponse.redirect(loginUrl);
+    if (pathname !== '/login') {
+      const loginUrl = new URL('/login', req.url);
+      loginUrl.searchParams.set('from', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    return NextResponse.next();
   }
 
   return res;
 }
 
 export const config = {
-  matcher: [
-    '/dashboard',
-    '/contacts/:path*',
-    '/pipeline',
-    '/reminders',
-    '/settings',
-    '/login',
-    '/register',
-    '/reset-password'
-  ]
+  matcher: ['/dashboard/:path*', '/clients/:path*', '/pipelines/:path*', '/login', '/register']
 };

@@ -3,21 +3,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
-import { supabase } from '../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
-type Props = {
-  user: any | null;
-};
-
-export default function Navbar({ user }: Props) {
+export default function Navbar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const session = useSession();
+  const supabase = useSupabaseClient();
 
   async function handleLogout() {
     await supabase.auth.signOut();
     router.push('/login');
   }
+
+  const user = session?.user ?? null;
 
   return (
     <nav className="w-full border-b bg-white dark:bg-background-dark">
