@@ -4,19 +4,32 @@
 
 /* Theme variables: used by ThemeProvider (data-theme attr on <html>) */
 :root {
-	--bg: #F8FAFC;
-	--fg: #0F172A;
-	--muted: #64748b;
+  --bg: #ffffff;
+  --fg: #0f172a;
+  --muted: #64748b;
 }
 
 [data-theme='dark'] {
-	--bg: #020617;
-	--fg: #F8FAFC;
-	--muted: #94a3b8;
+  --bg: #09090b; /* deep midnight */
+  --fg: #e6e6e6; /* light gray */
+  --muted: #94a3b8;
 }
 
 /* Basic element resets that rely on variables */
 html, body {
 	background-color: var(--bg);
 	color: var(--fg);
+}
+
+/* Premium dark background mesh/gradient for auth pages */
+.auth-bg {
+	background: radial-gradient(800px 400px at 10% 20%, rgba(99,102,241,0.06), transparent 10%),
+							radial-gradient(600px 300px at 90% 80%, rgba(14,165,233,0.04), transparent 10%),
+							var(--bg);
+}
+
+/* Ensure inputs have prominent focus in dark mode */
+.focus-glow:focus {
+	outline: none;
+	box-shadow: 0 4px 18px rgba(99,102,241,0.12), 0 0 0 4px rgba(99,102,241,0.06);
 }

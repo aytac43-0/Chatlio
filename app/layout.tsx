@@ -1,5 +1,5 @@
 import './globals.css';
-import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import { cookies } from 'next/headers';
 import Providers from './providers';
 import { createClient } from '../utils/supabase/server';
@@ -23,9 +23,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <body className="min-h-screen bg-background text-foreground antialiased">
         <Providers>
-          <Navbar />
+          <div className="flex min-h-screen">
+            <Sidebar />
+            <main className="flex-1 max-w-6xl mx-auto px-4 py-6">{children}</main>
+          </div>
         </Providers>
-        <main className="max-w-6xl mx-auto px-4 py-6">{children}</main>
       </body>
     </html>
   );
