@@ -8,12 +8,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#4F46E5',
+        primary: {
+          DEFAULT: '#6366f1', // Indigo Glow
+          600: '#6366f1'
+        },
         success: '#22C55E',
         accent: '#60A5FA',
-        background: '#F8FAFC',
-        foreground: '#0F172A',
-        'background-dark': '#020617'
+        background: '#020617', // Deep Midnight
+        'card-bg': '#0f172a', // Dark Navy
+        foreground: '#e6e6e6',
+        'muted-foreground': '#94a3b8'
       }
     }
   },

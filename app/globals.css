@@ -7,12 +7,16 @@
   --bg: #ffffff;
   --fg: #0f172a;
   --muted: #64748b;
+	--card-bg: #f8fafc;
+	--primary: #6366f1;
 }
 
 [data-theme='dark'] {
   --bg: #09090b; /* deep midnight */
   --fg: #e6e6e6; /* light gray */
   --muted: #94a3b8;
+	--card-bg: #0f172a; /* Dark Navy */
+	--primary: #6366f1; /* Indigo Glow */
 }
 
 /* Basic element resets that rely on variables */
@@ -20,6 +24,14 @@ html, body {
 	background-color: var(--bg);
 	color: var(--fg);
 }
+
+/* Dark-mode overrides for common utility classes to ensure visibility */
+[data-theme='dark'] .bg-white { background-color: var(--card-bg) !important; color: var(--fg) !important; }
+[data-theme='dark'] .text-black { color: var(--fg) !important; }
+[data-theme='dark'] .border-gray-200 { border-color: rgba(255,255,255,0.04) !important; }
+[data-theme='dark'] .text-gray-700 { color: #cbd5e1 !important; }
+[data-theme='dark'] .text-gray-900 { color: var(--fg) !important; }
+
 
 /* Premium dark background mesh/gradient for auth pages */
 .auth-bg {
@@ -32,4 +44,12 @@ html, body {
 .focus-glow:focus {
 	outline: none;
 	box-shadow: 0 4px 18px rgba(99,102,241,0.12), 0 0 0 4px rgba(99,102,241,0.06);
+}
+
+/* Glassmorphism surface for modals and cards */
+.glass {
+	background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+	backdrop-filter: blur(8px) saturate(120%);
+	-webkit-backdrop-filter: blur(8px) saturate(120%);
+	border: 1px solid rgba(255,255,255,0.06);
 }
