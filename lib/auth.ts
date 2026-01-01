@@ -1,6 +1,6 @@
 import { supabase } from './supabaseClient';
 import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
+import { createClient } from '../utils/supabase/server';
 
 /**
  * Check if a username is available (case-insensitive).
@@ -118,23 +118,7 @@ export default {
 export async function getCurrentSession() {
   try {
     const cookieStore = cookies();
-    const serverSupabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value;
-          },
-          set(name: string, value: string, options: any) {
-            try { cookieStore.set({ name, value, ...options }); } catch (e) {}
-          },
-          remove(name: string, options: any) {
-            try { cookieStore.set({ name, value: '', ...options }); } catch (e) {}
-          }
-        }
-      }
-    );
+    const serverSupabase = createClient(cookieStore);
     const { data } = await serverSupabase.auth.getSession();
     return data.session ?? null;
   } catch (err) {

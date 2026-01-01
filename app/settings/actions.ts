@@ -1,7 +1,7 @@
 "use server";
 
-import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { createClient } from '../../utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 export async function updateProfile(formData: FormData) {
@@ -11,23 +11,7 @@ export async function updateProfile(formData: FormData) {
   if (!username.trim()) throw new Error('Username is required');
 
   const cookieStore = cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          try { cookieStore.set({ name, value, ...options }); } catch (e) {}
-        },
-        remove(name: string, options: any) {
-          try { cookieStore.set({ name, value: '', ...options }); } catch (e) {}
-        }
-      }
-    }
-  );
+  const supabase = createClient(cookieStore);
   const {
     data: { session }
   } = await supabase.auth.getSession();
@@ -54,23 +38,7 @@ export async function changePassword(formData: FormData) {
   if (!next) throw new Error('New password required');
   // Note: Supabase does not provide a direct changePassword via anon client; use update user with password
   const cookieStore2 = cookies();
-  const supabase2 = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore2.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          try { cookieStore2.set({ name, value, ...options }); } catch (e) {}
-        },
-        remove(name: string, options: any) {
-          try { cookieStore2.set({ name, value: '', ...options }); } catch (e) {}
-        }
-      }
-    }
-  );
+  const supabase2 = createClient(cookieStore2);
   const {
     data: { session: session2 }
   } = await supabase2.auth.getSession();
@@ -88,23 +56,7 @@ export async function changePassword(formData: FormData) {
 export async function deleteAccount(formData: FormData) {
   // Best-effort delete: remove profile and related rows; cannot delete auth user without service role.
   const cookieStore3 = cookies();
-  const supabase3 = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore3.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          try { cookieStore3.set({ name, value, ...options }); } catch (e) {}
-        },
-        remove(name: string, options: any) {
-          try { cookieStore3.set({ name, value: '', ...options }); } catch (e) {}
-        }
-      }
-    }
-  );
+  const supabase3 = createClient(cookieStore3);
   const {
     data: { session: session3 }
   } = await supabase3.auth.getSession();

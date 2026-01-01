@@ -1,7 +1,7 @@
 "use server";
 
-import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { createClient } from '../../utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 export async function createReminder(formData: FormData) {
@@ -13,23 +13,7 @@ export async function createReminder(formData: FormData) {
   if (!note) throw new Error('Note is required');
 
   const cookieStore = cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          try { cookieStore.set({ name, value, ...options }); } catch (e) {}
-        },
-        remove(name: string, options: any) {
-          try { cookieStore.set({ name, value: '', ...options }); } catch (e) {}
-        }
-      }
-    }
-  );
+  const supabase = createClient(cookieStore);
   const {
     data: { session }
   } = await supabase.auth.getSession();
@@ -50,23 +34,7 @@ export async function toggleReminderDone(formData: FormData) {
   if (!id) throw new Error('Missing reminder id');
 
   const cookieStore2 = cookies();
-  const supabase2 = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore2.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          try { cookieStore2.set({ name, value, ...options }); } catch (e) {}
-        },
-        remove(name: string, options: any) {
-          try { cookieStore2.set({ name, value: '', ...options }); } catch (e) {}
-        }
-      }
-    }
-  );
+  const supabase2 = createClient(cookieStore2);
   // fetch current
   const { data } = await supabase2.from('reminders').select('done').eq('id', id).limit(1).single();
   if (!data) throw new Error('Reminder not found');
@@ -85,23 +53,7 @@ export async function deleteReminder(formData: FormData) {
   if (!id) throw new Error('Missing reminder id');
 
   const cookieStore3 = cookies();
-  const supabase3 = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore3.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          try { cookieStore3.set({ name, value, ...options }); } catch (e) {}
-        },
-        remove(name: string, options: any) {
-          try { cookieStore3.set({ name, value: '', ...options }); } catch (e) {}
-        }
-      }
-    }
-  );
+  const supabase3 = createClient(cookieStore3);
   const { error } = await supabase3.from('reminders').delete().eq('id', id);
   if (error) {
     console.error('deleteReminder error', error);

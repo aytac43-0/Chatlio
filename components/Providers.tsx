@@ -21,7 +21,7 @@ export function useConfirm() {
   return useContext(ConfirmContext);
 }
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const toast = useCallback((type: ToastType, message: string) => {
@@ -75,3 +75,5 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     </ToastContext.Provider>
   );
 }
+
+export default Providers;

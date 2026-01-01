@@ -1,7 +1,7 @@
 "use server";
 
-import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { createClient } from '../../utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 /**
@@ -25,31 +25,7 @@ export async function createContact(formData: FormData) {
   }
 
   const cookieStore = cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          try {
-            cookieStore.set({ name, value, ...options });
-          } catch (e) {
-            // ignore
-          }
-        },
-        remove(name: string, options: any) {
-          try {
-            cookieStore.set({ name, value: '', ...options });
-          } catch (e) {
-            // ignore
-          }
-        }
-      }
-    }
-  );
+  const supabase = createClient(cookieStore);
 
   // Ensure we have an authenticated user
   const {
@@ -85,23 +61,7 @@ export async function deleteContact(formData: FormData) {
   if (!id) throw new Error('Missing contact id');
 
   const cookieStore = cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          try { cookieStore.set({ name, value, ...options }); } catch (e) {}
-        },
-        remove(name: string, options: any) {
-          try { cookieStore.set({ name, value: '', ...options }); } catch (e) {}
-        }
-      }
-    }
-  );
+  const supabase = createClient(cookieStore);
 
   const { error } = await supabase.from('customers').delete().eq('id', id);
   if (error) {
