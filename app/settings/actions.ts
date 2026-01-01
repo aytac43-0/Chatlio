@@ -1,6 +1,6 @@
 "use server";
 
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 
@@ -10,7 +10,7 @@ export async function updateProfile(formData: FormData) {
 
   if (!username.trim()) throw new Error('Username is required');
 
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
   const {
     data: { session }
   } = await supabase.auth.getSession();
@@ -36,7 +36,7 @@ export async function changePassword(formData: FormData) {
   const next = (formData.get('next') as string | null) ?? '';
   if (!next) throw new Error('New password required');
   // Note: Supabase does not provide a direct changePassword via anon client; use update user with password
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
   const {
     data: { session }
   } = await supabase.auth.getSession();
@@ -53,7 +53,7 @@ export async function changePassword(formData: FormData) {
 
 export async function deleteAccount(formData: FormData) {
   // Best-effort delete: remove profile and related rows; cannot delete auth user without service role.
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
   const {
     data: { session }
   } = await supabase.auth.getSession();

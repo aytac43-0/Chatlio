@@ -1,6 +1,6 @@
 import { supabase } from './supabaseClient';
 import { cookies } from 'next/headers';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
 
 /**
  * Check if a username is available (case-insensitive).
@@ -117,7 +117,7 @@ export default {
  */
 export async function getCurrentSession() {
   try {
-    const serverSupabase = createServerSupabase(cookies());
+    const serverSupabase = createServerClient({ cookies });
     const { data } = await serverSupabase.auth.getSession();
     return data.session ?? null;
   } catch (err) {

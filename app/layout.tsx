@@ -1,6 +1,6 @@
 import './globals.css';
 import Navbar from '../components/Navbar';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import Providers from './providers';
 
@@ -10,17 +10,18 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // Create a Supabase server client and get current session so the client
-  // SessionContextProvider can hydrate without a flash.
-  const serverSupabase = createServerComponentClient({ cookies });
-  const {
-    data: { session }
-  } = await serverSupabase.auth.getSession();
+  // Create Supabase server client to optionally read session in server-rendered layout
+  const serverSupabase = createServerClient({ cookies });
+  try {
+    await serverSupabase.auth.getSession();
+  } catch (e) {
+    // swallow errors — layout should render regardless
+  }
 
   return (
     <html lang="en">
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <Providers session={session}>
+        <Providers>
           <Navbar />
         </Providers>
         <main className="max-w-6xl mx-auto px-4 py-6">{children}</main>

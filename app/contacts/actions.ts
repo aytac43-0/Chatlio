@@ -1,6 +1,6 @@
 "use server";
 
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 
@@ -24,7 +24,7 @@ export async function createContact(formData: FormData) {
     throw new Error('Invalid email address');
   }
 
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
 
   // Ensure we have an authenticated user
   const {

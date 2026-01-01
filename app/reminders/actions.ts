@@ -1,6 +1,6 @@
 "use server";
 
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 
@@ -12,7 +12,7 @@ export async function createReminder(formData: FormData) {
   if (!customer_id) throw new Error('Contact is required');
   if (!note) throw new Error('Note is required');
 
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
   const {
     data: { session }
   } = await supabase.auth.getSession();
@@ -32,7 +32,7 @@ export async function toggleReminderDone(formData: FormData) {
   const id = (formData.get('id') as string | null) ?? '';
   if (!id) throw new Error('Missing reminder id');
 
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
   // fetch current
   const { data } = await supabase.from('reminders').select('done').eq('id', id).limit(1).single();
   if (!data) throw new Error('Reminder not found');
@@ -50,7 +50,7 @@ export async function deleteReminder(formData: FormData) {
   const id = (formData.get('id') as string | null) ?? '';
   if (!id) throw new Error('Missing reminder id');
 
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
   const { error } = await supabase.from('reminders').delete().eq('id', id);
   if (error) {
     console.error('deleteReminder error', error);

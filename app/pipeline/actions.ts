@@ -1,6 +1,6 @@
 "use server";
 
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 
@@ -21,7 +21,7 @@ export async function createDeal(formData: FormData) {
   if (!customer_id) throw new Error('Contact is required');
   if (amount !== null && Number.isNaN(amount)) throw new Error('Amount must be a number');
 
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
 
   const {
     data: { session }
@@ -51,7 +51,7 @@ export async function updateDealStatus(formData: FormData) {
   if (!id) throw new Error('Missing deal id');
   if (!['forward', 'backward'].includes(direction)) throw new Error('Invalid direction');
 
-  const supabase = createServerActionClient({ cookies });
+  const supabase = createServerClient({ cookies });
   const { data } = await supabase.from('sales_pipeline').select('status').eq('id', id).limit(1).single();
   if (!data) throw new Error('Deal not found');
   const current = data.status as string;
