@@ -5,13 +5,16 @@ import { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
 import { useRouter } from 'next/navigation';
 import { useSession } from '../lib/session';
-import { supabase } from '../lib/supabaseClient';
+import { createBrowserClient } from '@supabase/ssr';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const session = useSession();
-  const supabase = useSupabaseClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   async function handleLogout() {
     await supabase.auth.signOut();
