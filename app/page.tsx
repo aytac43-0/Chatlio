@@ -1,53 +1,52 @@
 "use client";
 
 import Link from 'next/link';
-import { MessageSquare, Bot, ShoppingCart, Zap, ArrowRight, CheckCircle2, Star, Play } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { MessageSquare, Bot, ShoppingCart, Zap, CheckCircle2, Star, Play, Layers } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 // --- ANIMATION VARIANTS ---
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 50, damping: 20 }
+    transition: { type: "spring", stiffness: 60, damping: 20 }
   }
 };
 
 const floatAnimation = {
-  y: [-10, 10, -10],
+  y: [-15, 15, -15],
   transition: {
-    duration: 6,
+    duration: 8,
     repeat: Infinity,
     ease: "easeInOut"
   }
 };
 
 export default function LandingPage() {
-  const targetRef = useRef<HTMLDivElement>(null);
-
   return (
-    <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-white dark:bg-[#020617] text-slate-900 dark:text-white overflow-x-hidden selection:bg-blue-500/30 selection:text-blue-600 dark:selection:text-blue-100 transition-colors duration-300">
+    // THEME: Default Dark Navy (#020617) with support for light mode fallback if absolutely needed, but optimized for Dark.
+    <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-white dark:bg-[#020617] text-slate-900 dark:text-white overflow-x-hidden selection:bg-cyan-500/30 selection:text-cyan-100 transition-colors duration-300">
 
-      {/* GLOBAL BACKGROUND RADIALS (DARK MODE ONLY) */}
+      {/* GLOBAL BACKGROUND GLOWS (DARK MODE) */}
       <div className="hidden dark:block fixed top-0 left-0 w-full h-screen pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
+        <div className="absolute top-[-20%] right-[-10%] w-[1000px] h-[1000px] bg-blue-600/10 rounded-full blur-[150px]" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-cyan-600/5 rounded-full blur-[150px]" />
       </div>
 
       {/* --- HERO SECTION --- */}
-      <section className="relative px-6 pt-20 pb-20 lg:pt-32 lg:pb-32 z-10">
+      {/* Reduced padding-top to pt-20 as requested for tight layout */}
+      <section className="relative px-6 pt-20 pb-24 lg:pt-24 lg:pb-32 z-10">
         <div className="mx-auto max-w-7xl">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-20 items-center">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
 
             {/* HERO TEXT */}
             <motion.div
@@ -57,234 +56,235 @@ export default function LandingPage() {
               variants={containerVariants}
             >
               <motion.h1
-                className="text-5xl font-black tracking-tight sm:text-6xl md:text-[72px] mb-8 leading-[1.05]"
+                className="text-5xl font-black tracking-tight sm:text-6xl md:text-[76px] mb-8 leading-[1.05]"
                 variants={itemVariants}
+                style={{ textShadow: "0 0 40px rgba(59,130,246,0.1)" }}
               >
-                <span className="text-slate-900 dark:text-white drop-shadow-sm">Centralize Chats,</span> <br />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-blue-600 drop-shadow-lg">
-                  Automate Sales
+                <span className="text-slate-900 dark:text-white">Centralize Chats.</span> <br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+                  Automate Sales.
                 </span>
               </motion.h1>
 
               <motion.p
-                className="text-xl text-slate-600 dark:text-blue-100/80 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light"
+                className="text-xl text-slate-600 dark:text-blue-200/70 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal"
                 variants={itemVariants}
               >
-                Stop juggling apps. Turn every conversation into a revenue opportunity with our AI-powered Micro-CRM that unifies WhatsApp, Instagram, and more.
+                The all-in-one Micro-CRM that unifies WhatsApp, Instagram, and Messenger. Turn conversations into revenue with AI-powered automation.
               </motion.p>
 
               <motion.div
                 className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start"
                 variants={itemVariants}
               >
-                <Link href="/register" className="relative inline-flex items-center justify-center h-14 px-8 rounded-full bg-blue-600 text-white font-bold text-lg hover:scale-105 transition-transform duration-200 shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] z-20">
+                <Link href="/register" className="relative inline-flex items-center justify-center h-16 px-10 rounded-full bg-blue-600 text-white font-bold text-lg hover:scale-105 transition-transform duration-200 shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:shadow-[0_0_35px_rgba(34,211,238,0.6)] z-20">
                   Register Now
                 </Link>
-                <Link href="/login" className="inline-flex items-center justify-center h-14 px-8 rounded-full border border-slate-200 dark:border-blue-500/20 bg-white dark:bg-blue-500/5 hover:bg-slate-50 dark:hover:bg-blue-500/10 text-slate-700 dark:text-blue-100 font-semibold text-lg backdrop-blur-sm transition-colors z-20 shadow-sm">
+                <Link href="/login" className="inline-flex items-center justify-center h-16 px-10 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-slate-700 dark:text-white font-semibold text-lg backdrop-blur-sm transition-colors z-20">
                   Learn More
                 </Link>
               </motion.div>
             </motion.div>
 
-            {/* HERO VISUAL (FLOATING MOCKUP) */}
+            {/* HERO VISUAL (3D Stacked Interface) */}
             <motion.div
-              className="relative hidden lg:block perspective-1000"
-              initial={{ opacity: 0, scale: 0.8, rotateY: 15 }}
-              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+              className="relative hidden lg:block h-[500px]"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, ease: "easeOut" }}
             >
-              <motion.div
-                animate={floatAnimation}
-                className="relative rounded-2xl border border-slate-200 dark:border-blue-500/20 bg-white/80 dark:bg-[#0B1121]/80 backdrop-blur-xl shadow-2xl dark:shadow-[0_0_50px_rgba(59,130,246,0.15)] p-2"
-              >
-                {/* Mockup Container */}
-                <div className="rounded-xl overflow-hidden bg-slate-50 dark:bg-[#020617] relative aspect-[4/3]">
-                  {/* Top Bar */}
-                  <div className="h-10 bg-white dark:bg-[#0f172a] border-b border-slate-200 dark:border-white/5 flex items-center px-4 gap-2">
-                    <div className="flex gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                    </div>
-                  </div>
-                  {/* UI Mock content */}
-                  <div className="flex h-full">
-                    <div className="w-20 border-r border-slate-200 dark:border-white/5 bg-white dark:bg-[#0f172a]/50 p-3 space-y-4 flex flex-col items-center">
-                      <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-600/20 text-blue-600 dark:text-blue-500 flex items-center justify-center"><MessageSquare size={20} /></div>
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5" />
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5" />
-                    </div>
-                    <div className="flex-1 p-6 space-y-4">
-                      <div className="flex items-center justify-between mb-6">
-                        <h3 className="font-semibold text-slate-800 dark:text-white/90">Active Conversations</h3>
-                        <span className="px-2 py-1 rounded bg-emerald-100 dark:bg-green-500/10 text-emerald-600 dark:text-green-500 text-xs font-mono font-bold">LIVE</span>
-                      </div>
-
-                      {/* Floating Chat Bubbles */}
-                      <div className="relative space-y-4">
-                        <motion.div
-                          initial={{ x: -20, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          transition={{ delay: 0.5 }}
-                          className="p-3 rounded-2xl rounded-tl-none bg-blue-600 text-white text-sm shadow-lg max-w-[80%]"
-                        >
-                          Is the enterprise plan available?
-                        </motion.div>
-                        <motion.div
-                          initial={{ x: 20, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          transition={{ delay: 1 }}
-                          className="self-end ml-auto p-3 rounded-2xl rounded-tr-none bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-blue-100 text-sm shadow-sm max-w-[80%] border border-slate-200 dark:border-white/5"
-                        >
-                          Yes! We can set you up with a demo.
-                        </motion.div>
-                        <motion.div
-                          initial={{ x: -20, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          transition={{ delay: 1.5 }}
-                          className="p-3 rounded-2xl rounded-tl-none bg-purple-600 text-white text-sm shadow-lg max-w-[80%] flex items-center gap-2"
-                        >
-                          <Bot size={14} /> AI Agent handling support...
-                        </motion.div>
-                      </div>
-
-                    </div>
+              {/* 3D Container */}
+              <div className="relative w-full h-full perspective-2000">
+                <motion.div
+                  animate={floatAnimation}
+                  className="relative w-full h-full preserve-3d"
+                  style={{ rotateY: -10, rotateX: 5 }}
+                >
+                  {/* Back Layer (Tablet/Mobile representation) */}
+                  <div className="absolute top-10 right-10 w-[80%] h-[80%] rounded-2xl border border-blue-500/30 bg-[#0B1121] shadow-2xl opacity-60 translate-z-[-50px] overflow-hidden">
+                    <div className="h-full w-full bg-gradient-to-br from-blue-900/10 to-transparent" />
                   </div>
 
-                  {/* Floating Badge */}
+                  {/* Front Layer (Main Dashboard) */}
+                  <div className="absolute top-0 left-0 w-[90%] h-[90%] rounded-2xl border border-blue-400/50 bg-[#020617]/90 backdrop-blur-xl shadow-[0_0_50px_rgba(34,211,238,0.15)] overflow-hidden flex flex-col z-20">
+
+                    {/* Header */}
+                    <div className="h-14 bg-[#0F172A] border-b border-white/5 flex items-center justify-between px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="flex gap-1.5">
+                          <div className="w-3 h-3 rounded-full bg-red-500" />
+                          <div className="w-3 h-3 rounded-full bg-amber-500" />
+                          <div className="w-3 h-3 rounded-full bg-green-500" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="px-2 py-1 bg-blue-500/10 text-blue-400 rounded text-xs font-mono">v2.4.0</div>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 flex">
+                      {/* Sidebar Mock */}
+                      <div className="w-20 border-r border-white/5 bg-[#0B1121] flex flex-col items-center py-6 gap-6">
+                        <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.5)]">
+                          <MessageSquare size={20} />
+                        </div>
+                        <div className="w-10 h-10 rounded-xl bg-white/5" />
+                        <div className="w-10 h-10 rounded-xl bg-white/5" />
+                        <div className="w-10 h-10 rounded-xl bg-white/5 mt-auto" />
+                      </div>
+
+                      {/* Main Area */}
+                      <div className="flex-1 p-6 bg-[#020617]">
+                        <div className="flex justify-between items-end mb-8">
+                          <div>
+                            <div className="text-gray-400 text-sm mb-1">Total Revenue</div>
+                            <div className="text-3xl font-bold text-white">$12,450.00</div>
+                          </div>
+                          <div className="h-10 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-lg flex items-center text-sm font-semibold transition-colors cursor-pointer">
+                            + New Order
+                          </div>
+                        </div>
+
+                        {/* Neon Cards */}
+                        <div className="space-y-3">
+                          {[1, 2, 3].map((i) => (
+                            <div key={i} className="group p-4 rounded-xl bg-[#0F172A] border border-white/5 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.1)] transition-all flex items-center gap-4">
+                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 opacity-80" />
+                              <div className="flex-1">
+                                <div className="h-2.5 w-32 bg-white/20 rounded mb-2" />
+                                <div className="h-2 w-20 bg-white/10 rounded" />
+                              </div>
+                              <div className="text-emerald-400 font-mono text-sm">+$120</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Floating Decoration */}
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 1.2, type: "spring" }}
-                    className="absolute bottom-6 right-6 px-4 py-3 bg-white text-slate-900 rounded-xl shadow-xl dark:shadow-2xl border border-slate-100 dark:border-none font-bold flex items-center gap-3 z-20"
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+                    className="absolute -right-4 top-[20%] p-4 bg-[#0F172A] border border-cyan-500/30 rounded-xl shadow-2xl z-30"
                   >
-                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white"><CheckCircle2 size={18} /></div>
-                    <div>
-                      <div className="text-xs text-slate-500 uppercase tracking-wider">Revenue</div>
-                      <div className="text-lg leading-none">+$1,250.00</div>
-                    </div>
+                    <Bot className="w-8 h-8 text-cyan-400" />
                   </motion.div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* --- PLATFORMS STRIP --- */}
-      <section className="py-12 border-y border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-[#050b18]/50 backdrop-blur-sm relative z-10 w-full overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 text-center mb-8">
-          <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Integrated with your favorite platforms</h3>
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-          {['whatsapp.png', 'instagram.jpg', 'telegram.jpg'].map((logo, i) => (
-            <img key={i} src={`/logos/${logo}`} alt="Platform Logo" className="h-8 md:h-10 w-auto object-contain hover:scale-110 transition-transform duration-300" />
-          ))}
-          {/* Text Fallback for Messenger if image missing, or just icon */}
-          <div className="flex items-center gap-2 font-bold text-xl text-slate-700 dark:text-slate-300"><MessageSquare className="w-6 h-6" /> Messenger</div>
+      {/* --- INTEGRATIONS STRIP --- */}
+      <section className="py-10 border-y border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-[#050b18]/50 backdrop-blur-sm z-10">
+        <div className="mx-auto max-w-7xl px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap">
+            Integrated with your favorite platforms
+          </div>
+          <div className="flex flex-wrap items-center gap-8 md:gap-12 opacity-80 grayscale hover:grayscale-0 transition-all duration-500">
+            {/* WHATSAPP */}
+            <div className="h-8 md:h-10 relative group">
+              <img src="/logos/whatsapp.png" alt="WhatsApp" className="h-full w-auto object-contain" />
+            </div>
+            {/* INSTAGRAM */}
+            <div className="h-8 md:h-10 relative group">
+              <img src="/logos/instagram.jpg" alt="Instagram" className="h-full w-auto object-contain rounded-lg" />
+            </div>
+            {/* TELEGRAM */}
+            <div className="h-8 md:h-10 relative group">
+              <img src="/logos/telegram.jpg" alt="Telegram" className="h-full w-auto object-contain rounded-full" />
+            </div>
+            {/* MESSENGER (Text Fallback since image missing) */}
+            <div className="flex items-center gap-2 font-bold text-lg text-slate-700 dark:text-slate-300">
+              <MessageSquare className="w-6 h-6 text-blue-500" /> Messenger
+            </div>
+          </div>
         </div>
       </section>
 
       {/* --- FEATURES GRID --- */}
-      <section className="py-24 relative z-10 bg-white dark:bg-[#020617] transition-colors">
+      <section className="py-24 relative z-10 bg-white dark:bg-[#020617]">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-black mb-6 text-slate-900 dark:text-white"><span className="text-blue-600">Everything</span> in one place.</h2>
-            <p className="text-slate-600 dark:text-blue-200/60 text-lg">Powerful tools designed to help you sell more effectively on every channel.</p>
-          </div>
-
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard
               icon={MessageSquare}
               title="Unified Inbox"
-              description="Connect WhatsApp, Instagram, and more into a single, clutter-free stream."
+              description="All your chats in one place. No more tab switching."
             />
             <FeatureCard
               icon={Bot}
               title="AI Automation"
-              description="Train our AI to answer FAQs, qualify leads, and handle support 24/7."
+              description="Auto-reply to FAQs and qualify leads instantly."
             />
             <FeatureCard
               icon={ShoppingCart}
               title="Sales & Orders"
-              description="Generate payment links and track orders directly within the chat window."
+              description="Create orders and take payments inside the chat."
             />
           </div>
         </div>
       </section>
 
       {/* --- HOW IT WORKS (FLOW) --- */}
-      <section className="py-24 bg-slate-50 dark:bg-[#050b18] border-t border-slate-200 dark:border-white/5 relative overflow-hidden z-10 transition-colors">
-        <div className="mx-auto max-w-7xl px-6 relative">
-          <h2 className="text-3xl md:text-5xl font-black mb-20 text-center text-slate-900 dark:text-white">How Chatlio Works</h2>
+      <section className="py-24 bg-slate-50 dark:bg-[#050b18] border-t border-slate-200 dark:border-white/5 z-10">
+        <div className="mx-auto max-w-7xl px-6">
+          <h2 className="text-3xl md:text-4xl font-black mb-20 text-center text-slate-900 dark:text-white">How it Works</h2>
 
-          <div className="grid md:grid-cols-3 gap-8 relative">
+          <div className="grid md:grid-cols-3 gap-12 relative items-center">
             {/* Arrow Connections (Desktop only) */}
-            <div className="hidden md:block absolute top-12 left-[30%] w-[40%] h-[2px] bg-gradient-to-r from-blue-500/0 via-blue-500/30 to-blue-500/0 z-0" />
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent -translate-y-1/2 z-0" />
 
             {[
-              { step: "01", title: "Automate", desc: "Set up AI rules to handle incoming messages instantly." },
-              { step: "02", title: "Manage", desc: "Organize chats and track customer details in the CRM." },
-              { step: "03", title: "Convert", desc: "Turn conversations into paid orders automatically." }
+              { step: "01", title: "Automate with AI", icon: Zap },
+              { step: "02", title: "Manage Chats", icon: Layers },
+              { step: "03", title: "Convert Sales", icon: CheckCircle2 }
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-                className="relative z-10 p-8 rounded-2xl bg-white dark:bg-[#0F172A]/50 border border-slate-200 dark:border-white/5 shadow-lg dark:shadow-none backdrop-blur-sm hover:border-blue-500/30 transition-colors"
+                whileHover={{ y: -5 }}
+                className="relative z-10 flex flex-col items-center text-center p-8 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-white/5 shadow-xl dark:shadow-none hover:border-cyan-500/30 transition-all group"
               >
-                <div className="text-6xl font-black text-slate-100 dark:text-white/5 mb-6 absolute top-4 right-6 select-none">{item.step}</div>
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-xl font-bold mb-6 text-white shadow-lg shadow-blue-500/20">
-                  {i + 1}
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white mb-6 shadow-lg shadow-cyan-500/20 group-hover:scale-110 transition-transform">
+                  <item.icon size={28} />
                 </div>
-                <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white">{item.title}</h3>
-                <p className="text-slate-600 dark:text-blue-100/60 leading-relaxed">{item.desc}</p>
+                <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{item.title}</h3>
+                <p className="text-sm text-slate-500 dark:text-gray-400">Step {item.step} description placeholder text for flow.</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* --- TESTIMONIALS --- */}
-      <section className="py-24 relative z-10 bg-white dark:bg-[#020617] transition-colors">
-        <div className="mx-auto max-w-7xl px-6">
-          <h2 className="text-3xl md:text-5xl font-black mb-16 text-center text-slate-900 dark:text-white">Trusted by Sellers</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* --- TESTIMONIALS (Circular Avatars) --- */}
+      <section className="py-24 relative z-10 bg-white dark:bg-[#020617]">
+        <div className="mx-auto max-w-5xl px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-black mb-16 text-slate-900 dark:text-white">Trusted by Sellers</h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[1, 2, 3, 4].map((i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="p-6 rounded-2xl bg-slate-50 dark:bg-[#0F172A] border border-slate-200 dark:border-white/5 hover:border-blue-500/30 transition-colors"
-              >
-                <div className="flex gap-1 mb-4">
-                  {[1, 2, 3, 4, 5].map(s => <Star key={s} size={14} className="fill-amber-400 text-amber-400" />)}
+              <div key={i} className="flex flex-col items-center">
+                <div className="w-20 h-20 rounded-full bg-slate-200 dark:bg-white/10 mb-4 p-1 border-2 border-transparent hover:border-cyan-500 transition-colors cursor-pointer">
+                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="Avatar" className="w-full h-full rounded-full" />
                 </div>
-                <p className="text-sm text-slate-600 dark:text-gray-300 mb-6 italic">"Chatlio transformed how we handle customer support. A game changer!"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/10" />
-                  <div className="text-xs">
-                    <div className="font-bold text-slate-900 dark:text-white">Sarah Jenkins</div>
-                    <div className="text-slate-500 dark:text-gray-500">Store Owner</div>
-                  </div>
-                </div>
-              </motion.div>
+                <div className="font-bold text-slate-900 dark:text-white">Alex Doe</div>
+                <div className="text-xs text-blue-500 uppercase tracking-widest font-bold mb-2">CEO, Brand</div>
+                <p className="text-sm text-slate-500 dark:text-gray-400 italic">"Incredible tool for our sales team."</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 border-t border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#020617] mt-auto relative z-10 transition-colors">
+      <footer className="py-12 border-t border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#020617] mt-auto relative z-10">
         <div className="mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-sm text-slate-500 dark:text-gray-500">© 2024 Chatlio. All rights reserved.</p>
           <div className="flex gap-6 text-sm font-medium text-slate-500 dark:text-gray-400">
-            <Link href="#" className="hover:text-blue-600 dark:hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-blue-600 dark:hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">Terms of Service</Link>
           </div>
         </div>
       </footer>
@@ -295,15 +295,16 @@ export default function LandingPage() {
 function FeatureCard({ icon: Icon, title, description }: { icon: any, title: string, description: string }) {
   return (
     <motion.div
-      className="group relative p-8 rounded-2xl bg-slate-50 dark:bg-[#0F172A]/40 border border-slate-200 dark:border-blue-500/10 backdrop-blur-sm hover:-translate-y-2 transition-transform duration-300"
-      whileHover={{ boxShadow: "0 0 25px rgba(59,130,246,0.15)" }}
+      className="group relative p-8 rounded-2xl bg-white dark:bg-[#0F172A]/60 border border-slate-200 dark:border-blue-500/20 hover:border-cyan-500/50 backdrop-blur-sm transition-all duration-300"
+      whileHover={{ y: -5, boxShadow: "0 0 30px rgba(34,211,238,0.15)" }}
     >
-      <div className="absolute top-6 right-6 w-10 h-10 rounded-full bg-blue-100 dark:bg-gradient-to-br dark:from-blue-500/20 dark:to-cyan-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 opacity-80 group-hover:opacity-100 transition-opacity">
-        <Icon size={20} />
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+      <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-600/10 flex items-center justify-center text-blue-600 dark:text-cyan-400 mb-6 group-hover:scale-110 transition-transform">
+        <Icon size={24} />
       </div>
-      <div className="mt-4 mb-4 text-slate-400 dark:text-gray-500 font-mono text-xs uppercase tracking-wider">Feature</div>
-      <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">{title}</h3>
-      <p className="text-slate-600 dark:text-blue-100/60 leading-relaxed font-light">
+      <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">{title}</h3>
+      <p className="text-slate-600 dark:text-blue-100/60 leading-relaxed text-sm">
         {description}
       </p>
     </motion.div>
