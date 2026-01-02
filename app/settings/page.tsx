@@ -1,40 +1,9 @@
-import { cookies } from 'next/headers';
-import { createServerSupabase } from '../../lib/supabaseServer';
-import ProfileForm from '../../components/ProfileForm';
-import SecurityForm from '../../components/SecurityForm';
-import PreferencesForm from '../../components/PreferencesForm';
-import DangerZone from '../../components/DangerZone';
-import React from 'react';
 
-export default async function SettingsPage() {
-  const supabase = createServerSupabase(cookies());
-  const { data } = await supabase.from('profiles').select('id, email, full_name, username').limit(1).single();
-
-  const profile = data ?? null;
-
+export default function SettingsPage() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Settings</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-4 bg-white dark:bg-gray-900 rounded shadow">
-          <h2 className="font-semibold mb-3">Profile</h2>
-          <ProfileForm profile={profile} />
-        </div>
-        <div className="p-4 bg-white dark:bg-gray-900 rounded shadow">
-          <h2 className="font-semibold mb-3">Security</h2>
-          <SecurityForm />
-        </div>
-      </div>
-
-      <div className="p-4 bg-white dark:bg-gray-900 rounded shadow">
-        <h2 className="font-semibold mb-3">Preferences</h2>
-        <PreferencesForm />
-      </div>
-
-      <div className="p-4 bg-white dark:bg-gray-900 rounded shadow">
-        <DangerZone />
-      </div>
+    <div className="space-y-4">
+      <h1 className="text-3xl font-bold">Settings</h1>
+      <p className="text-muted-foreground">Manage your account preferences and configurations.</p>
     </div>
   );
 }
-

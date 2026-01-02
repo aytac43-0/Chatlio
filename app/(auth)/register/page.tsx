@@ -1,66 +1,126 @@
 "use client";
-import React, { useState } from 'react';
-import AnimatedAuthCard from '../../../components/AnimatedAuthCard';
-import Input from '../../../components/Input';
-import Button from '../../../components/Button';
-import { isEmail, passwordStrength } from '../../../lib/validators';
-import { signUpWithProfile } from '../../../lib/auth.client';
+
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { createBrowserClient } from '@supabase/ssr';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { PasswordInput } from '@/components/PasswordInput';
 
 export default function RegisterPage() {
-  const [fullName, setFullName] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
-  const [agree, setAgree] = useState(false);
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
-  async function handleSubmit(e: React.FormEvent) {
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     setError(null);
 
-    if (!agree) return setError('You must agree to the Terms of Service.');
-    if (password !== confirm) return setError('Passwords do not match.');
-    if (!isEmail(email)) return setError('Invalid email address.');
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
 
-    const strength = passwordStrength(password);
-    if (!strength.valid) return setError('Password is too weak. Use at least 8 characters, mixed case and numbers.');
-
-    setLoading(true);
-    try {
-      await signUpWithProfile({ email: email.trim(), password, fullName: fullName.trim(), username: username.trim() });
-      // On success, redirect to dashboard. Auth session may require email confirmation depending on Supabase settings.
-      router.push('/dashboard');
-    } catch (err: any) {
-      // Map or display friendly error messages
-      const msg = err?.message || 'Sign up failed. Please try again.';
-      setError(msg);
-    } finally {
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
       setLoading(false);
+      return;
     }
-  }
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+    } else {
+      router.refresh();
+      router.push('/dashboard');
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <AnimatedAuthCard>
-        <h2 className="text-2xl font-semibold mb-4">Create your account</h2>
-        <form className="space-y-3" onSubmit={handleSubmit}>
-          <Input label="Full name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-          <Input label="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-          <Input label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <Input label="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
-          <Input label="Confirm password" value={confirm} onChange={(e) => setConfirm(e.target.value)} type="password" required />
-          <div className="flex items-center gap-2">
-            <input type="checkbox" id="agree" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
-            <label htmlFor="agree" className="text-sm">I agree to the <a href="/terms-of-service" className="text-accent">Terms of Service</a> and <a href="/privacy-policy" className="text-accent">Privacy Policy</a></label>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 auth-bg animate-in fade-in duration-500">
+      <div className="w-full max-w-md">
+        {/* Back Link */}
+        <Link href="/" className="group inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
+          <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          Return to homepage
+        </Link>
+
+        <div className="rounded-xl border bg-card text-card-foreground shadow-sm glass overflow-hidden">
+          <div className="flex flex-col space-y-1.5 p-6 bg-gradient-to-b from-white/5 to-transparent">
+            <h3 className="font-semibold tracking-tight text-2xl text-center">Create an account</h3>
+            <p className="text-sm text-muted-foreground text-center">
+              Get started with Chatlio today
+            </p>
           </div>
-          {error && <p className="text-red-600">{error}</p>}
-          <Button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create account'}</Button>
-        </form>
-      </AnimatedAuthCard>
+          <div className="p-6 pt-0">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <div className="p-3 text-sm bg-destructive/10 text-destructive rounded-md border border-destructive/20 animate-in slide-in-from-top-2">
+                  {error}
+                </div>
+              )}
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none" htmlFor="email">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="hello@example.com"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 focus-glow transition-all duration-200"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none" htmlFor="password">Password</label>
+                <PasswordInput
+                  id="password"
+                  name="password"
+                  required
+                  className="focus-glow transition-all duration-200"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none" htmlFor="confirmPassword">Confirm Password</label>
+                <PasswordInput
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  required
+                  className="focus-glow transition-all duration-200"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] duration-200"
+              >
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Register
+              </button>
+            </form>
+
+            <div className="mt-6 text-center text-sm">
+              <span className="text-muted-foreground">Already have an account? </span>
+              <Link href="/login" className="font-medium text-primary hover:underline">
+                Log in
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

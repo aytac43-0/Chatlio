@@ -1,8 +1,9 @@
+
 export default function AutomationsPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-semibold">Automations</h1>
-      <p className="text-sm text-muted-foreground mt-2">Placeholder page for Automations.</p>
+    <div className="space-y-4">
+      <h1 className="text-3xl font-bold">Automations</h1>
+      <p className="text-muted-foreground">Configure your AI automation rules here.</p>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
@@ -12,34 +12,40 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    try {
-      const saved = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
-      if (saved === 'dark' || saved === 'light' || saved === 'system') return saved as Theme;
-    } catch (e) {}
-    // Default to dark for a solid base as requested
-    return 'dark';
-  });
+  const [theme, setTheme] = useState<Theme>('dark');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    try { localStorage.setItem('theme', theme); } catch (e) {}
+    // Check local storage or system preference
+    const saved = localStorage.getItem('theme') as Theme;
+    if (saved) {
+      setTheme(saved);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    }
+    setMounted(true);
+  }, []);
 
-    const resolved = theme === 'system'
-      ? (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)')?.matches ? 'dark' : 'light')
-      : theme;
+  useEffect(() => {
+    if (!mounted) return;
 
-    try {
-      if (typeof document !== 'undefined') {
-        if (resolved === 'dark') document.documentElement.classList.add('dark');
-        else document.documentElement.classList.remove('dark');
-      }
-    } catch (e) {}
-  }, [theme]);
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    localStorage.setItem('theme', theme);
+  }, [theme, mounted]);
 
-  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
+  // Prevent flash by rendering nothing until mounted (optional, but good for strict theme apps)
+  // OR render children but know that theme might toggle. 
+  // For better UX with SSG/SSR, we usually render but accept potential hydration mismatch or use script.
+  // We'll render immediately but `theme` state updates will trigger class changes.
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
-
-export default ThemeProvider;
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);

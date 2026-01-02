@@ -1,8 +1,9 @@
+
 export default function MessagesPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-semibold">Messages</h1>
-      <p className="text-sm text-muted-foreground mt-2">Placeholder page for Messages.</p>
+    <div className="space-y-4">
+      <h1 className="text-3xl font-bold">Messages</h1>
+      <p className="text-muted-foreground">Manage your conversations here.</p>
     </div>
   );
 }

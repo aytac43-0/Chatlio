@@ -1,7 +1,7 @@
 import './globals.css';
-import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
 import { cookies } from 'next/headers';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import Providers from './providers';
 import { createClient } from '../utils/supabase/server';
 import { getCurrentUser } from '../lib/auth.server';
@@ -17,27 +17,37 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // Create Supabase server client to optionally read session in server-rendered layout
   const cookieStore = cookies();
   const serverSupabase = createClient(cookieStore);
   let user = null;
+
   try {
-    // Prefer using server helper to resolve current user for conditional rendering
     user = await getCurrentUser();
+    // Refresh session if needed
     await serverSupabase.auth.getSession();
   } catch (e) {
-    // swallow errors — layout should render regardless
+    // ignore
   }
 
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-background text-foreground antialiased">
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen bg-background font-sans antialiased text-foreground">
         <Providers>
-          <div className="flex flex-col min-h-screen">
+          <div className="relative flex min-h-screen flex-col">
             <Navbar initialUser={user} />
             <div className="flex flex-1">
-              {user ? <Sidebar /> : null}
-              <main className="flex-1 max-w-6xl mx-auto px-4 py-6">{children}</main>
+              {/* Sidebar is self-managed but we render it here. 
+                  It returns null if no session on client, effectively hidden.
+                  But for server rendering layout shift prevention, we might want to condition it here too if possible,
+                  but user prop is reliable enough for the padding logic.
+              */}
+              <Sidebar />
+
+              <main className={`flex-1 ${user ? 'md:pl-64' : ''}`}>
+                <div className="container py-6">
+                  {children}
+                </div>
+              </main>
             </div>
           </div>
         </Providers>

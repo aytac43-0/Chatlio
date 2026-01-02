@@ -1,155 +1,66 @@
 "use client";
 
-import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useSession } from '../lib/session';
-import { createBrowserClient } from '@supabase/ssr';
 import {
-  Home,
-  Briefcase,
+  LayoutDashboard,
   MessageSquare,
-  Zap,
-  Settings as SettingsIcon,
-  LogOut,
-  LogIn,
-  UserPlus,
-  PlusCircle
+  ShoppingBag,
+  Workflow,
+  Settings
 } from 'lucide-react';
+import { cn } from '@/lib/utils'; // Assuming standard cn utility is available or I will create it.
 
-function Icon({ children }: { children: React.ReactNode }) {
-  return <span className="w-5 h-5 inline-flex items-center justify-center">{children}</span>;
-}
+// Simple utility if we don't assume the project has 'cn' yet, but usually it does with Tailwind.
+// I will check utils/index.ts or similar, but for safety I can define a simple helper inside or rely on clsx.
+// Actually I'll use template literals to be safe and simple.
+
+const links = [
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/messages', label: 'Messages', icon: MessageSquare },
+  { href: '/orders', label: 'Orders', icon: ShoppingBag },
+  { href: '/automations', label: 'Automations', icon: Workflow },
+  { href: '/settings', label: 'Settings', icon: Settings },
+];
 
 export default function Sidebar() {
-  const pathname = usePathname();
-  const router = useRouter();
   const session = useSession();
-  const user = session?.user ?? null;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const pathname = usePathname();
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push('/login');
+  // STRICT RULE: Visible ONLY when logged in.
+  if (!session?.user) {
+    return null;
   }
 
   return (
-    <>
-      <aside className="w-72 p-4 hidden md:block" aria-label="Sidebar">
-        <div className="space-y-6">
-        <nav className="flex flex-col space-y-1">
-          {user ? (
-            <>
-              <SidebarLink href="/dashboard" label="Dashboard" active={pathname === '/dashboard'}>
-                <Icon><Home className="w-5 h-5" /></Icon>
-              </SidebarLink>
+    <aside className="fixed left-0 top-14 z-30 hidden h-[calc(100vh-3.5rem)] w-64 border-r bg-background md:block">
+      <div className="h-full px-3 py-4 overflow-y-auto">
+        <ul className="space-y-1">
+          {links.map((link) => {
+            const Icon = link.icon;
+            const isActive = pathname === link.href || pathname?.startsWith(link.href + '/');
 
-              <SidebarLink href="/messages" label="Messages" active={pathname?.startsWith('/messages')}>
-                <Icon><MessageSquare className="w-5 h-5" /></Icon>
-              </SidebarLink>
-
-              <SidebarLink href="/orders" label="Orders" active={pathname?.startsWith('/orders')}>
-                <Icon><Briefcase className="w-5 h-5" /></Icon>
-              </SidebarLink>
-
-              <SidebarLink href="/automations" label="Automations" active={pathname?.startsWith('/automations')}>
-                <Icon><Zap className="w-5 h-5" /></Icon>
-              </SidebarLink>
-
-              <SidebarLink href="/settings" label="Settings" active={pathname?.startsWith('/settings')}>
-                <Icon><SettingsIcon className="w-5 h-5" /></Icon>
-              </SidebarLink>
-
-              <div className="px-3 py-2">
-                <button onClick={handleLogout} className="flex items-center gap-3 text-sm text-gray-300 hover:text-primary">
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
-                </button>
-              </div>
-            </>
-          ) : null}
-        </nav>
-        </div>
-      </aside>
-
-      {/* Mobile drawer button + drawer */}
-      <div className="md:hidden">
-        <button aria-label="Open menu" onClick={() => setMobileOpen(true)} className="fixed top-4 left-4 z-40 p-2 bg-white dark:bg-gray-800 rounded shadow">☰</button>
-        {mobileOpen && (
-          <div className="fixed inset-0 z-50 flex">
-            <div className="w-64 p-4 bg-white dark:bg-gray-900 border-r">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-500 rounded flex items-center justify-center text-white font-bold">C</div>
-                  <div>
-                    <div className="text-lg font-semibold text-foreground">Chatlio</div>
-                    <div className="text-xs text-muted-foreground">Premium</div>
-                  </div>
-                </div>
-                <button onClick={() => setMobileOpen(false)} className="px-2">✕</button>
-              </div>
-              <nav className="flex flex-col space-y-1">
-                <SidebarLink href="/dashboard" label="Dashboard" active={pathname === '/dashboard'}>
-                  <Icon><Home className="w-5 h-5" /></Icon>
-                </SidebarLink>
-                <SidebarLink href="/messages" label="Messages" active={pathname?.startsWith('/messages')}>
-                  <Icon><MessageSquare className="w-5 h-5" /></Icon>
-                </SidebarLink>
-                <SidebarLink href="/orders" label="Orders" active={pathname?.startsWith('/orders')}>
-                  <Icon><Briefcase className="w-5 h-5" /></Icon>
-                </SidebarLink>
-                <SidebarLink href="/automations" label="Automations" active={pathname?.startsWith('/automations')}>
-                  <Icon><Zap className="w-5 h-5" /></Icon>
-                </SidebarLink>
-                <SidebarLink href="/settings" label="Settings" active={pathname?.startsWith('/settings')}>
-                  <Icon><SettingsIcon className="w-5 h-5" /></Icon>
-                </SidebarLink>
-                <div className="px-3 py-2">
-                  <button onClick={handleLogout} className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 hover:text-primary">
-                    <LogOut className="w-4 h-4" />
-                    <span>Logout</span>
-                  </button>
-                </div>
-              </nav>
-            </div>
-            <div className="flex-1" onClick={() => setMobileOpen(false)} />
-          </div>
-        )}
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className={`
+                    flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors
+                    ${isActive
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    }
+                  `}
+                >
+                  <Icon className="mr-3 h-5 w-5" />
+                  {link.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </div>
-    </>
-  );
-}
-
-function SidebarLink({ href, label, children, active, external }: { href: string; label: string; children: React.ReactNode; active?: boolean; external?: boolean }) {
-  const base = 'flex items-center gap-3 px-3 py-2 rounded text-gray-200';
-  const activeClasses = active ? 'bg-white/5 text-primary' : 'hover:bg-white/3 hover:text-primary';
-
-  if (external) {
-    return (
-      <a href={href} target="_blank" rel="noreferrer" className={`group ${base} ${activeClasses}`}>
-        {children}
-        <span className="text-sm">{label}</span>
-      </a>
-    );
-  }
-
-  return (
-    <Link href={href} className={`group ${base} ${activeClasses}`}>
-      <motion.div
-        initial={{ opacity: 0.95 }}
-        whileHover={{ x: 6 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-        className="flex items-center gap-3 w-full"
-      >
-        {children}
-        <span className="text-sm">{label}</span>
-      </motion.div>
-    </Link>
+    </aside>
   );
 }
