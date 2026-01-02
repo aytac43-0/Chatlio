@@ -33,7 +33,7 @@ export default function Navbar({ initialUser }: { initialUser?: any }) {
         {/* LEFT: Branding */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity">
           <img src="/favicon.png" alt="Chatlio Logo" className="w-8 h-8 object-contain" />
-          <span className="text-white">Chatlio</span>
+          <span className="text-slate-900 dark:text-white">Chatlio</span>
         </Link>
 
         {/* RIGHT: Actions */}
