@@ -10,7 +10,8 @@ export const metadata = {
   title: 'Chatlio',
   description: 'WhatsApp-focused Micro-CRM for sellers',
   icons: {
-    icon: '/favicon.png',
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png'
   }
 };
 
