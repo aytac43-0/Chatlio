@@ -11,7 +11,7 @@
 	--primary: #6366f1;
 }
 
-[data-theme='dark'] {
+[data-theme='dark'], .dark {
 	--bg: #0f172a; /* slate-900 */
 	--fg: #e6edf3; /* slate-100 */
 	--muted: #94a3b8; /* slate-400 */
@@ -26,11 +26,11 @@ html, body {
 }
 
 /* Dark-mode overrides for common utility classes to ensure visibility */
-[data-theme='dark'] .bg-white { background-color: var(--card-bg) !important; color: var(--fg) !important; }
-[data-theme='dark'] .text-black { color: var(--fg) !important; }
-[data-theme='dark'] .border-gray-200 { border-color: rgba(255,255,255,0.06) !important; }
-[data-theme='dark'] .text-gray-700 { color: #cbd5e1 !important; }
-[data-theme='dark'] .text-gray-900 { color: var(--fg) !important; }
+[data-theme='dark'] .bg-white, .dark .bg-white { background-color: var(--card-bg) !important; color: var(--fg) !important; }
+[data-theme='dark'] .text-black, .dark .text-black { color: var(--fg) !important; }
+[data-theme='dark'] .border-gray-200, .dark .border-gray-200 { border-color: rgba(255,255,255,0.06) !important; }
+[data-theme='dark'] .text-gray-700, .dark .text-gray-700 { color: #cbd5e1 !important; }
+[data-theme='dark'] .text-gray-900, .dark .text-gray-900 { color: var(--fg) !important; }
 
 
 /* Premium dark background mesh/gradient for auth pages */

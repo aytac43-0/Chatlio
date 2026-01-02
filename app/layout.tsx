@@ -11,10 +11,14 @@ export const metadata = {
   description: 'WhatsApp-focused Micro-CRM for sellers'
 };
 
-export const icons = {
-  icon: '/favicon.ico',
-  shortcut: '/favicon.ico',
-  apple: '/apple-touch-icon.png'
+export const metadata = {
+  title: 'Chatlio',
+  description: 'WhatsApp-focused Micro-CRM for sellers',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png'
+  }
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-screen bg-background text-foreground antialiased">
         <Providers>
           <div className="flex flex-col min-h-screen">
-            <Navbar />
+            <Navbar initialUser={user} />
             <div className="flex flex-1">
               {user ? <Sidebar /> : null}
               <main className="flex-1 max-w-6xl mx-auto px-4 py-6">{children}</main>
