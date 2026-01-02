@@ -30,9 +30,10 @@ export default function Navbar({ initialUser }: { initialUser?: any }) {
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-6 justify-between">
         {/* LEFT: Branding */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          {/* You could add a Logo graphic here */}
-          <span className="text-primary">Chatlio</span>
+        {/* LEFT: Branding */}
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity">
+          <img src="/favicon.png" alt="Chatlio Logo" className="w-8 h-8 object-contain" />
+          <span className="text-white">Chatlio</span>
         </Link>
 
         {/* RIGHT: Actions */}
