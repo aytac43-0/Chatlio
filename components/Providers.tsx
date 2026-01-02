@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 type ToastType = 'success' | 'error' | 'info';
 type ToastItem = { id: string; type: ToastType; message: string };
@@ -48,7 +50,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ toast }}>
       <ConfirmContext.Provider value={{ confirm }}>
-        {children}
+        {/* Page transition wrapper keyed by pathname for simple transitions */}
+        <PageTransitionWrapper>{children}</PageTransitionWrapper>
 
         {/* Toast container */}
         <div className="fixed right-4 bottom-4 z-50 flex flex-col gap-2">
@@ -73,6 +76,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
         )}
       </ConfirmContext.Provider>
     </ToastContext.Provider>
+  );
+}
+
+function PageTransitionWrapper({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  return (
+    <motion.div key={pathname} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.22 }}>
+      {children}
+    </motion.div>
   );
 }
 

@@ -16,9 +16,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const saved = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
       if (saved === 'dark' || saved === 'light' || saved === 'system') return saved as Theme;
-      if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)')?.matches) return 'dark';
     } catch (e) {}
-    return 'system';
+    // Default to dark for a solid base as requested
+    return 'dark';
   });
 
   useEffect(() => {

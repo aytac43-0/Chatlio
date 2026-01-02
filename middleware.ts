@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 // Public and protected routes
 const PUBLIC_PATHS = ['/', '/login', '/register'];
-const PROTECTED_PATHS = ['/dashboard', '/clients', '/pipelines'];
+const PROTECTED_PATHS = ['/dashboard', '/messages', '/orders', '/automations', '/settings'];
 
 export async function middleware(req: NextRequest) {
   // Skip internals and assets
@@ -33,5 +33,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/clients/:path*', '/pipelines/:path*', '/login', '/register']
+  matcher: ['/dashboard/:path*', '/messages/:path*', '/orders/:path*', '/automations/:path*', '/settings/:path*', '/login', '/register']
 };

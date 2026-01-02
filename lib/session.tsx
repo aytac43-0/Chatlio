@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from './supabaseClient';
+import { createBrowserClient } from '@supabase/ssr';
 
 type SessionState = {
   session: any | null;
@@ -15,6 +15,11 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
+
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+    );
 
     async function init() {
       try {
@@ -47,4 +52,9 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
 export function useSession() {
   return useContext(SessionContext);
+}
+
+export function useUser() {
+  const s = useContext(SessionContext);
+  return s?.user ?? null;
 }

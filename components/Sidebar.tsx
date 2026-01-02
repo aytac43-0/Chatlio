@@ -27,6 +27,7 @@ export default function Sidebar() {
   const router = useRouter();
   const session = useSession();
   const user = session?.user ?? null;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -39,8 +40,9 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="w-72 p-4 hidden md:block" aria-label="Sidebar">
-      <div className="space-y-6">
+    <>
+      <aside className="w-72 p-4 hidden md:block" aria-label="Sidebar">
+        <div className="space-y-6">
         <div className="flex items-center gap-3 px-2">
           <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-500 rounded flex items-center justify-center text-white font-bold">C</div>
           <div>
@@ -90,8 +92,54 @@ export default function Sidebar() {
             </>
           )}
         </nav>
+        </div>
+      </aside>
+
+      {/* Mobile drawer button + drawer */}
+      <div className="md:hidden">
+        <button aria-label="Open menu" onClick={() => setMobileOpen(true)} className="fixed top-4 left-4 z-40 p-2 bg-white dark:bg-gray-800 rounded shadow">☰</button>
+        {mobileOpen && (
+          <div className="fixed inset-0 z-50 flex">
+            <div className="w-64 p-4 bg-white dark:bg-gray-900 border-r">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-500 rounded flex items-center justify-center text-white font-bold">C</div>
+                  <div>
+                    <div className="text-lg font-semibold text-foreground">Chatlio</div>
+                    <div className="text-xs text-muted-foreground">Premium</div>
+                  </div>
+                </div>
+                <button onClick={() => setMobileOpen(false)} className="px-2">✕</button>
+              </div>
+              <nav className="flex flex-col space-y-1">
+                <SidebarLink href="/dashboard" label="Dashboard" active={pathname === '/dashboard'}>
+                  <Icon><Home className="w-5 h-5" /></Icon>
+                </SidebarLink>
+                <SidebarLink href="/messages" label="Messages" active={pathname?.startsWith('/messages')}>
+                  <Icon><MessageSquare className="w-5 h-5" /></Icon>
+                </SidebarLink>
+                <SidebarLink href="/orders" label="Orders" active={pathname?.startsWith('/orders')}>
+                  <Icon><Briefcase className="w-5 h-5" /></Icon>
+                </SidebarLink>
+                <SidebarLink href="/automations" label="Automations" active={pathname?.startsWith('/automations')}>
+                  <Icon><Zap className="w-5 h-5" /></Icon>
+                </SidebarLink>
+                <SidebarLink href="/settings" label="Settings" active={pathname?.startsWith('/settings')}>
+                  <Icon><SettingsIcon className="w-5 h-5" /></Icon>
+                </SidebarLink>
+                <div className="px-3 py-2">
+                  <button onClick={handleLogout} className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 hover:text-primary">
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </nav>
+            </div>
+            <div className="flex-1" onClick={() => setMobileOpen(false)} />
+          </div>
+        )}
       </div>
-    </aside>
+    </>
   );
 }
 

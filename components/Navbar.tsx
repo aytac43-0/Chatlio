@@ -42,20 +42,21 @@ export default function Navbar() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <ThemeToggle />
           <div className="relative">
             {user ? (
               <div className="flex items-center gap-2">
                 <button className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700" aria-label="User menu" onClick={() => setOpen(!open)} />
                 {open && (
                   <div className="absolute right-0 mt-2 bg-white dark:bg-gray-800 border rounded shadow p-2">
-                    <button className="block w-full text-left px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700" onClick={() => router.push('/settings')}>Settings</button>
+                    <button className="block w-full text-left px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700" onClick={() => router.push('/settings')}>Account</button>
+                    <div className="px-2 py-1"><ThemeToggle /></div>
                     <button className="block w-full text-left px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700" onClick={handleLogout}>Logout</button>
                   </div>
                 )}
               </div>
             ) : (
               <div className="flex items-center gap-2">
+                <ThemeToggle />
                 <Link href="/login"><span className="text-sm px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Login</span></Link>
                 <Link href="/register"><span className="text-sm px-3 py-1 rounded bg-primary text-white hover:opacity-90">Register</span></Link>
               </div>
