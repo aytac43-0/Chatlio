@@ -1,14 +1,10 @@
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
-// Browser Supabase client. Uses public anon key only (never use service_role in browser).
+// Browser Supabase client using @supabase/ssr helper which wraps the official client.
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
 
-// Note: we intentionally do not throw during module import so the app can build.
-// Missing env vars will cause runtime failures which are easier to diagnose in local/dev.
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: {
-    persistSession: true,
-    detectSessionInUrl: true
-  }
-});
+// Note: do not throw during module import so app can build. Missing env vars cause runtime failures.
+export const supabase = createBrowserClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+export default supabase;
