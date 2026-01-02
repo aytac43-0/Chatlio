@@ -54,8 +54,8 @@ export default function LandingPage() {
       </div>
 
       {/* --- HERO SECTION --- */}
-      {/* Zero Gap: Using pt-16 to pull closer to navbar (h-14). +/- 2.5rem padding. */}
-      <section className="relative px-6 pt-16 pb-24 lg:pt-20 lg:pb-32 z-10 w-full max-w-7xl mx-auto">
+      {/* Zero Gap: Using pt-12 to pull very close to navbar. */}
+      <section className="relative px-6 pt-12 pb-24 lg:pt-16 lg:pb-32 z-10 w-full max-w-7xl mx-auto">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
 
           {/* HERO TEXT */}
