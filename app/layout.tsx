@@ -8,11 +8,6 @@ import { getCurrentUser } from '../lib/auth.server';
 
 export const metadata = {
   title: 'Chatlio',
-  description: 'WhatsApp-focused Micro-CRM for sellers'
-};
-
-export const metadata = {
-  title: 'Chatlio',
   description: 'WhatsApp-focused Micro-CRM for sellers',
   icons: {
     icon: '/favicon.ico',
