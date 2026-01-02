@@ -28,8 +28,12 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       ? (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)')?.matches ? 'dark' : 'light')
       : theme;
 
-    if (resolved === 'dark') document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
+    // Use data-theme attribute so CSS [data-theme='dark'] rules apply
+    try {
+      if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('data-theme', resolved);
+      }
+    } catch (e) {}
   }, [theme]);
 
   return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;

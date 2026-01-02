@@ -11,6 +11,12 @@ export const metadata = {
   description: 'WhatsApp-focused Micro-CRM for sellers'
 };
 
+export const icons = {
+  icon: '/favicon.ico',
+  shortcut: '/favicon.ico',
+  apple: '/apple-touch-icon.png'
+};
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   // Create Supabase server client to optionally read session in server-rendered layout
   const cookieStore = cookies();
@@ -26,10 +32,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-      </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <Providers>
           <div className="flex flex-col min-h-screen">

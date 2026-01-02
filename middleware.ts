@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
   const hasSession = Boolean(cookie);
 
   // Redirect authenticated users away from auth pages
-  if (hasSession && (pathname === '/login' || pathname === '/register')) {
+  if (hasSession && (pathname === '/login' || pathname === '/register' || pathname === '/')) {
     return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 

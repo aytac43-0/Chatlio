@@ -43,14 +43,6 @@ export default function Sidebar() {
     <>
       <aside className="w-72 p-4 hidden md:block" aria-label="Sidebar">
         <div className="space-y-6">
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-500 rounded flex items-center justify-center text-white font-bold">C</div>
-          <div>
-            <div className="text-lg font-semibold text-foreground">Chatlio</div>
-            <div className="text-xs text-muted-foreground">Premium</div>
-          </div>
-        </div>
-
         <nav className="flex flex-col space-y-1">
           {user ? (
             <>
@@ -58,15 +50,15 @@ export default function Sidebar() {
                 <Icon><Home className="w-5 h-5" /></Icon>
               </SidebarLink>
 
-              <SidebarLink href="/business/create" label="Business" active={pathname?.startsWith('/business')}>
-                <Icon><Briefcase className="w-5 h-5" /></Icon>
-              </SidebarLink>
-
-              <SidebarLink href="/whatsapp" label="WhatsApp" active={pathname?.startsWith('/whatsapp')}>
+              <SidebarLink href="/messages" label="Messages" active={pathname?.startsWith('/messages')}>
                 <Icon><MessageSquare className="w-5 h-5" /></Icon>
               </SidebarLink>
 
-              <SidebarLink href="https://n8n.io" label="Automation" external>
+              <SidebarLink href="/orders" label="Orders" active={pathname?.startsWith('/orders')}>
+                <Icon><Briefcase className="w-5 h-5" /></Icon>
+              </SidebarLink>
+
+              <SidebarLink href="/automations" label="Automations" active={pathname?.startsWith('/automations')}>
                 <Icon><Zap className="w-5 h-5" /></Icon>
               </SidebarLink>
 
@@ -81,16 +73,7 @@ export default function Sidebar() {
                 </button>
               </div>
             </>
-          ) : (
-            <>
-              <SidebarLink href="/login" label="Login">
-                <Icon><LogIn className="w-5 h-5" /></Icon>
-              </SidebarLink>
-              <SidebarLink href="/register" label="Register">
-                <Icon><UserPlus className="w-5 h-5" /></Icon>
-              </SidebarLink>
-            </>
-          )}
+          ) : null}
         </nav>
         </div>
       </aside>
