@@ -53,8 +53,8 @@ export default function LandingPage() {
       </div>
 
       {/* --- HERO SECTION --- */}
-      {/* SPACING: pt-6 (Extremely tight to navbar as requested, reducing from pt-10/16) */}
-      <section className="relative px-6 pt-6 pb-20 lg:pt-12 lg:pb-32 z-10 w-full max-w-7xl mx-auto">
+      {/* SPACING: pt-12 (Optimal tight spacing as requested) */}
+      <section className="relative px-6 pt-12 pb-20 lg:pt-16 lg:pb-32 z-10 w-full max-w-7xl mx-auto">
         <div className="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
 
           {/* HERO TEXT */}
@@ -97,7 +97,7 @@ export default function LandingPage() {
                 Register Now
               </Link>
               <Link href="/login" className="inline-flex items-center justify-center h-14 px-8 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-white font-semibold text-lg backdrop-blur-sm transition-colors z-20">
-                View Demo
+                Learn More
               </Link>
             </motion.div>
           </motion.div>
@@ -147,7 +147,7 @@ export default function LandingPage() {
                       <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
                       <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
                     </div>
-                    <div className="text-[10px] font-mono text-blue-400 opacity-70">DASHBOARD_main</div>
+                    <div className="text-[10px] font-mono text-blue-400 opacity-70">CHATLIO_PRO</div>
                   </div>
                   {/* Body */}
                   <div className="flex-1 flex">
@@ -159,10 +159,10 @@ export default function LandingPage() {
                     <div className="flex-1 p-6 relative">
                       <div className="flex justify-between items-end mb-6">
                         <div>
-                          <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">Total Conversions</div>
-                          <div className="text-3xl font-bold text-white">+2,850</div>
+                          <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">Weekly Sales</div>
+                          <div className="text-3xl font-bold text-white">$4,250.00</div>
                         </div>
-                        <div className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded text-xs font-bold">+42%</div>
+                        <div className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded text-xs font-bold">+15%</div>
                       </div>
                       <div className="space-y-3">
                         {[1, 2, 3].map(i => (
@@ -207,7 +207,7 @@ export default function LandingPage() {
       <section className="py-24 relative z-10 bg-[#020617]">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center max-w-2xl mx-auto mb-20">
-            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white">Power Your <span className="text-blue-500">Sales</span></h2>
+            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white">Power Your <span className="text-blue-500">Business</span></h2>
             <p className="text-blue-100/60 text-lg">Everything you need to manage customer conversations and close deals.</p>
           </div>
 
@@ -277,14 +277,14 @@ export default function LandingPage() {
               <div className="flex gap-1 mb-6">
                 {[1, 2, 3, 4, 5].map(s => <Star key={s} size={18} className="fill-blue-500 text-blue-500" />)}
               </div>
-              <p className="text-xl text-blue-100/90 mb-8 font-light leading-relaxed">"The AI automation cut our response time by 90% while doubling sales leads."</p>
+              <p className="text-xl text-blue-100/90 mb-8 font-light leading-relaxed">"The AI automation cut our support costs by 60% while increasing sales conversion."</p>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-slate-700 to-slate-600 flex items-center justify-center text-white font-bold text-lg">
-                  TF
+                <div className="w-12 h-12 rounded-full ring-2 ring-white/10 bg-white/10 overflow-hidden relative">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" alt="Sarah" />
                 </div>
                 <div>
-                  <div className="font-bold text-white">TechFlow</div>
-                  <div className="text-xs text-blue-400 uppercase tracking-widest font-bold">CTO</div>
+                  <div className="font-bold text-white">Sarah Jenkins</div>
+                  <div className="text-xs text-blue-400 uppercase tracking-widest font-bold">Head of Ops, TechFlow</div>
                 </div>
               </div>
             </motion.div>
@@ -297,14 +297,14 @@ export default function LandingPage() {
               <div className="flex gap-1 mb-6">
                 {[1, 2, 3, 4, 5].map(s => <Star key={s} size={18} className="fill-cyan-500 text-cyan-500" />)}
               </div>
-              <p className="text-xl text-blue-100/90 mb-8 font-light leading-relaxed">"Unifying all chats into one dashboard is the best CRM decision we've made."</p>
+              <p className="text-xl text-blue-100/90 mb-8 font-light leading-relaxed">"Unifying WhatsApp and Instagram into one dashboard changed our workflow forever."</p>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-slate-700 to-slate-600 flex items-center justify-center text-white font-bold text-lg">
-                  GR
+                <div className="w-12 h-12 rounded-full ring-2 ring-white/10 bg-white/10 overflow-hidden relative">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus" alt="Marcus" />
                 </div>
                 <div>
-                  <div className="font-bold text-white">Global Retail</div>
-                  <div className="text-xs text-cyan-400 uppercase tracking-widest font-bold">Founder</div>
+                  <div className="font-bold text-white">Marcus Thorne</div>
+                  <div className="text-xs text-cyan-400 uppercase tracking-widest font-bold">Founder, RetailGo</div>
                 </div>
               </div>
             </motion.div>
