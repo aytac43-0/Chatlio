@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <Sidebar />
 
               <main className={`flex-1 ${user ? 'md:pl-64' : ''}`}>
-                <div className="container py-6">
+                <div className={user ? "container py-6" : ""}>
                   {children}
                 </div>
               </main>
