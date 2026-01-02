@@ -10,11 +10,7 @@ import {
   Workflow,
   Settings
 } from 'lucide-react';
-import { cn } from '@/lib/utils'; // Assuming standard cn utility is available or I will create it.
-
-// Simple utility if we don't assume the project has 'cn' yet, but usually it does with Tailwind.
-// I will check utils/index.ts or similar, but for safety I can define a simple helper inside or rely on clsx.
-// Actually I'll use template literals to be safe and simple.
+import { cn } from '@/lib/utils';
 
 const links = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -45,13 +41,12 @@ export default function Sidebar() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={`
-                    flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors
-                    ${isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                    }
-                  `}
+                  className={cn(
+                    "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  )}
                 >
                   <Icon className="mr-3 h-5 w-5" />
                   {link.label}
